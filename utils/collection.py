@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def scrapeTable(statYear, statDay, statName, statAbbrev):
+def scrapeData(statYear, statDay, statName, statAbbrev):
     url = f"https://www.teamrankings.com/ncaa-basketball/stat/{statName}?date={statYear}-{statDay}"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -43,12 +43,12 @@ def scrapeTable(statYear, statDay, statName, statAbbrev):
     return pd.DataFrame(data, columns=columns)
 
 
-def compileTables(statYear, statDay, stats):
+def compileData(statYear, statDay, stats):
     dfs = []
     for stat in stats:
         statName = stat["name"]
         statAbbrev = stat["abbrev"]
-        df = scrapeTable(statYear, statDay, statName, statAbbrev)
+        df = scrapeData(statYear, statDay, statName, statAbbrev)
         df.sort_values(by="team", inplace=True)
         if dfs:
             df = df.drop(columns=["year"])
